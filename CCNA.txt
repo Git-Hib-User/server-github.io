@@ -1,0 +1,93 @@
+Enable  Privileged mode          	enable 
+Enters configure terminal   		configure terminal 
+
+
+
+Create username and password
+-----------------------------
+username admin secret 0000
+line console 0 > login local 
+
+
+
+VLAN
+-----
+combine switches   					SWITCHPORT TRUNK ENCAPSULATION DOT1Q
+combine switches                    interface fastEthernet 0/24 > switchport mode trunk					
+Activate VTP Protocol 				vtp mode server/client
+	
+Divide switch to vswitches 			interface fastEthernet 0/0  > switchport access vlan 2	
+Activate Router						ip routing
+
+
+
+Configer Router interface			interface fastEthernet 0/0 
+------------------
+Turn on 							no shutdown 
+Add ip address 					    ip address 192.168.1.254  255.255.255.0
+
+
+
+Configer dhcp service for network	ip dhcp pool 192.168.1.0
+----------------------------------
+Select network						network 192.168.1.0  255.255.255.0
+Select Gateway 						default-router 192.168.1.254
+
+
+
+ Configer RIP Protocol				router rip 
+---------------------
+Select network						network 192.168.0.0
+Select network						network 192.168.1.0
+
+
+Configer EIGRP Protocol				router eigrp 0
+-----------------------		
+Select network						network 192.168.0.0
+Select network						network 192.168.1.0
+
+
+
+Configer OSPF Protocol				router ospf 0
+-----------------------		
+Select network						network 192.168.0.0  0.0.0.255 area 0
+Select network						network 192.168.1.0  0.0.0.255 area 0
+
+
+
+
+Configer Static Routung Protocol	ip route 0.0.0.0.0.0.0.0 192.168.11.2
+--------------------------------
+
+
+
+
+Configer NAT(PAT)
+-----------------
+access-list 1 permit 192.168.0.0 0.0.0.255
+ip nat pool nat 192.168.100.1 192.168.100.1 netmask 255.255.255.0
+ip nat inside source list 1 pool nat overload
+interface > ip nat inside 
+interface > ip nat outside
+
+
+
+
+
+
+
+
+
+
+dispaly route						ip route
+dispaly neighbor					ip ospf neighbor
+dispaly interface					ip interface brief	
+dispaly config						running-config
+dispaly config						ip protocols				
+dispaly VLAN						vlan
+dispaly VTP 						vtp status
+save 								do write
+
+reset								write erase
+restart								reload
+
